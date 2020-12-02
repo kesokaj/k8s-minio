@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: minio-console-vmar
+  namespace: minio
+spec:
+  selector:
+    matchLabels:
+      app: minio-console-vmar
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: minio-console-vmar
+    spec:
+      containers:
+      - name: minio-console-vmar
+        image: minio/console:v0.4.6
+        args:
+        - server
+        env:
+        - name: CONSOLE_PBKDF_PASSPHRASE
+          valueFrom:
+            secretKeyRef:
+              name: minio-console-vmar-creds
+              key: CONSOLE_PBKDF_PASSPHRASE
+        - name: CONSOLE_PBKDF_SALT
+          valueFrom:
+            secretKeyRef:
+              name: minio-console-vmar-creds
+              key: CONSOLE_PBKDF_SALT
+        - name: CONSOLE_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-console-vmar-creds
+              key: CONSOLE_ACCESS_KEY
+        - name: CONSOLE_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: minio-console-vmar-creds
+              key: CONSOLE_SECRET_KEY
+        - name: CONSOLE_MINIO_SERVER
+          valueFrom:
+            secretKeyRef:
+              name: minio-console-vmar-creds
+              key: CONSOLE_MINIO_SERVER
+        ports:
+        - containerPort: 9443
+        - containerPort: 9090
+
