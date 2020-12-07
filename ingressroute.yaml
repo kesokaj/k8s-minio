@@ -2,13 +2,13 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: minio-test-vks-int-vmar-se
+  name: s3-vks-vmar-se
   namespace: minio
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`minio.test.vks.int.vmar.se`)
+  - match: Host(`s3.vks.vmar.se`)
     kind: Rule
     services:
     - name: minio-vmar
