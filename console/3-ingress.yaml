@@ -2,12 +2,12 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: s3-console-spgo-se
+  name: s3ui-spgo-se
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`s3-console.spgo.se`)
+  - match: Host(`s3ui.spgo.se`)
     kind: Rule
     services:
     - name: minio-console
