@@ -7,20 +7,15 @@ spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`s3.spgo.se`)
-    kind: Rule
-    services:
-    - name: minio-s3
-      port: 9000
   - match: HostRegexp(`s3.spgo.se`,`{subhost:[a-z]+}.s3.spgo.se`)
     kind: Rule
     services:
     - name: minio-s3
       port: 9000
   tls:
-    certResolver: default
     domains:
-    - main: s3.spgo.se
+    - main: "s3.spgo.se"
       sans:
-      - '*.s3.spgo.se'
+      - "*.s3.spgo.se"
+      certResolver: default
 

@@ -1,7 +1,0 @@
-USER-SUPPLIED VALUES:
-hostname: rke.spgo.se
-ingress:
-  tls:
-    source: letsEncrypt
-letsEncrypt:
-  email: ostling.simon@gmail.com

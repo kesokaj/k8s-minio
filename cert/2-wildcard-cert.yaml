@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: s3-spgo-se-cert
+spec:
+  commonName: "*.s3.spgo.se"
+  secretName: s3-spgo-se-cert
+  dnsNames:
+    - "s3.spgo.se"
+    - "*.s3.spgo.se"
+  issuerRef:
+    name: letsencrypt-issuer
+    kind: ClusterIssuer
