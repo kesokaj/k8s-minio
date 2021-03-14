@@ -2,17 +2,16 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: s3-vks-vmar-se
-  namespace: minio
+  name: s3-console-spgo-se
 spec:
   entryPoints:
     - websecure
   routes:
-  - match: Host(`s3.vks.vmar.se`)
+  - match: Host(`s3-console.spgo.se`)
     kind: Rule
     services:
-    - name: minio-vmar
-      port: 9000
+    - name: minio-console
+      port: 9090
   tls:
     certResolver: default
 

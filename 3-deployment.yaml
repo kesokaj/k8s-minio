@@ -2,26 +2,25 @@
 apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: minio-vmar
-  namespace: minio
+  name: minio-s3
 spec:
   selector:
     matchLabels:
-      app: minio-vmar
+      app: minio-s3
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: minio-vmar
+        app: minio-s3
     spec:
       volumes:
-      - name: minio-vmar-pv
+      - name: minio-s3-pv
         persistentVolumeClaim:
-          claimName: minio-vmar-pvc
+          claimName: minio-s3-pvc
       containers:
-      - name: minio-vmar
-        image: minio/minio:RELEASE.2020-11-25T22-36-25Z
+      - name: minio-s3
+        image: minio/minio:RELEASE.2021-03-12T00-00-47Z
         args:
         - server
         - /data
@@ -29,16 +28,26 @@ spec:
         - name: MINIO_ACCESS_KEY
           valueFrom:
             secretKeyRef:
-              name: minio-vmar-creds
+              name: minio-env
               key: MINIO_ACCESS_KEY
         - name: MINIO_SECRET_KEY
           valueFrom:
             secretKeyRef:
-              name: minio-vmar-creds
+              name: minio-env
               key: MINIO_SECRET_KEY
+        - name: MINIO_DOMAIN
+          valueFrom:
+            secretKeyRef:
+              name: minio-env
+              key: MINIO_DOMAIN
+        - name: MINIO_BROWSER
+          valueFrom:
+            secretKeyRef:
+              name: minio-env
+              key: MINIO_BROWSER
         ports:
         - containerPort: 9000
         volumeMounts:
-        - name: minio-vmar-pv 
+        - name: minio-s3-pv 
           mountPath: "/data"
 

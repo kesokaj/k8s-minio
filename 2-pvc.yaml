@@ -1,13 +1,12 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: minio-vmar-pvc
-  namespace: minio
+  name: minio-s3-pvc
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: longhorn-rwo
+  storageClassName: longhorn
   resources:
     requests:
-      storage: 64Gi
+      storage: 256Gi
 

@@ -1,21 +1,63 @@
 ##     
 ````
-helm repo add minio https://helm.min.io/
-helm install --namespace minio minio-s3 minio/minio --set persistence.size=8Gi --set mode=distributed --set replicas=2
+# Edit in file 1-secrets.yaml if desired
+root@k8s:~/k8s-minio# cat 1-secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: minio-s3-creds
+type: Opaque
+stringData:
+    MINIO_ACCESS_KEY: "superadmin"
+    MINIO_SECRET_KEY: "3k0pLugg3n"
+    MINIO_DOMAIN: "s3.spgo.se"
 
-or run the yaml files
+# If you edit in 1-secrets you also need to edit ingressroute.yaml
+root@k8s:~/k8s-minio# cat ingressroute.yaml
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: s3-spgo-se
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`*.s3.spgo.se`)
+    kind: Rule
+    services:
+    - name: minio-s3
+      port: 9000
+  tls:
+    certResolver: default
+    domains:
+    - main: s3.spgo.se
+      sans:
+      - '*.s3.spgo.se'
+
+# When ready run in folder and wait for deployment to finish
+kubectl apply -f .
 
 
-handle new users and such
-
-https://www.civo.com/learn/create-a-multi-user-minio-server-for-s3-compatible-object-hosting
-
-
+########################################
+WHEN DEPLOYMENT IS UP RUN BELOW COMMANDS
+########################################
 
 
-.\mc.exe alias set s3-vks https://s3.vks.vmar.se <admin key> <admin pass>
-.\mc.exe admin user add s3-vks <anv> <lösenord>
-.\mc.exe admin policy add s3-vks test policy.json
-.\mc.exe admin policy set s3-vks test user=vmarsimon
+# Add server to mc list
+mc alias set local https://s3.spgo.se superuser '3k0pLugg3n'
+
+# List settings
+mc alias list
+
+# Add console user
+mc admin user add local console '3k0pLugg3n'
+
+# Create console adminpolicy
+mc admin policy add local consoleAdmin consoleAdmin.json
+
+# Set policy to console user
+mc admin policy set local consoleAdmin user=console
+
 
 ````
